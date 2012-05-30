@@ -71,8 +71,11 @@
 	'
 	categories="configuration" chapters="using-routes" functions="">
 	<cfscript>
+		addRoute(pattern="[controller]/[action]/[key].[format]");
 		addRoute(pattern="[controller]/[action]/[key]");
+		addRoute(pattern="[controller]/[action].[format]");
 		addRoute(pattern="[controller]/[action]");
+		addRoute(pattern="[controller].[format]", action="index");
 		addRoute(pattern="[controller]", action="index");
 	</cfscript>
 </cffunction>

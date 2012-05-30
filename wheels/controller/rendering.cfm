@@ -274,6 +274,7 @@
 <cffunction name="$argumentsForPartial" returntype="struct" access="public" output="false">
 	<cfscript>
 		var loc = {};
+		arguments.params = params;
 		if (StructKeyExists(arguments, "$dataFunction") && arguments.$dataFunction != "false")
 		{
 			if (IsBoolean(arguments.$dataFunction))
@@ -283,12 +284,36 @@
 				{
 					loc.metaData = GetMetaData(variables[loc.dataFunction]);
 					if (IsStruct(loc.metaData) && StructKeyExists(loc.metaData, "returnType") && loc.metaData.returnType == "struct" && StructKeyExists(loc.metaData, "access") && loc.metaData.access == "private")
-						return $invoke(method=loc.dataFunction);
+						return $invoke(method=loc.dataFunction, invokeArgs=arguments);
+				}
+				else if (ListLen(arguments.$name, "/") GT 1)
+				{
+
+					try 
+					{ 
+						loc.controller = CreateObject('controllers.' & ListFirst(arguments.$name, "/"));
+						loc.metaData = GetMetaData(loc.controller[loc.dataFunction]);
+					} 
+					catch (Any e) 
+					{ 
+						return StructNew(); 
+					}
+					
+					if (IsStruct(loc.metaData) && StructKeyExists(loc.metaData, "returnType") && loc.metaData.returnType == "struct")
+						return $invoke(componentReference=loc.controller, method=loc.dataFunction, invokeArgs=arguments);
+						
 				}
 			}
 			else
 			{
-				return $invoke(method=arguments.$dataFunction);
+				if (ListLen(arguments.$dataFunction, '.') GT 1)
+				{
+					return $invoke(componentReference='controllers.' & ListFirst(arguments.$dataFunction, '.'), method=ListLast(arguments.$dataFunction, '.'), invokeArgs=arguments);
+				}
+				else
+				{
+					return $invoke(method=arguments.$dataFunction, invokeArgs=arguments);
+				}
 			}
 		}
 		return StructNew();

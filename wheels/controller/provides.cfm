@@ -209,11 +209,11 @@
 		loc.format = "html";
 		
 		// see if we have a format param
-		if (StructKeyExists(arguments.params, "format"))
+		if (StructKeyExists(arguments.params, "format") AND len(arguments.params.format))
 			return arguments.params.format;
 		
 		for (loc.item in application.wheels.formats)
-			if (arguments.httpAccept == application.wheels.formats[loc.item])
+			if (arguments.httpAccept CONTAINS application.wheels.formats[loc.item])
 				return loc.item;
 	</cfscript>
 	<cfreturn loc.format />

@@ -70,23 +70,22 @@
 	<cfargument name="path" type="string" required="true">
 	<cfscript>
 		var loc = {};
-	
+
 		loc.iEnd = ArrayLen(application.wheels.routes);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.format = "";
-			loc.route = application.wheels.routes[loc.i];
-			if (StructKeyExists(loc.route, "format"))
-				loc.format = loc.route.format;
-				
-			loc.currentRoute = loc.route.pattern;
+			if (StructKeyExists(application.wheels.routes[loc.i], "format"))
+				loc.format = application.wheels.routes[loc.i].format;
+
+			loc.currentRoute = application.wheels.routes[loc.i].pattern;
 			if (loc.currentRoute == "*") {
-				loc.returnValue = loc.route;
+				loc.returnValue = Duplicate(application.wheels.routes[loc.i]);
 				break;
 			} 
 			else if (arguments.path == "" && loc.currentRoute == "")
 			{
-				loc.returnValue = loc.route;
+				loc.returnValue = Duplicate(application.wheels.routes[loc.i]);
 				break;
 			}
 			else if (ListLen(arguments.path, "/") gte ListLen(loc.currentRoute, "/") && loc.currentRoute != "")
@@ -97,13 +96,13 @@
 				{
 					loc.item = ListGetAt(loc.currentRoute, loc.j, "/");
 					loc.thisRoute = ReplaceList(loc.item, "[,]", "");
-					loc.thisURL = ListFirst(ListGetAt(arguments.path, loc.j, "/"), '.');
+					loc.thisURL = ListGetAt(arguments.path, loc.j, "/");
 					if (Left(loc.item, 1) != "[" && loc.thisRoute != loc.thisURL)
 						loc.match = false;
 				}
 				if (loc.match)
 				{
-					loc.returnValue = loc.route;
+					loc.returnValue = Duplicate(application.wheels.routes[loc.i]);
 					if (len(loc.format))
 					{
 						loc.returnValue[ReplaceList(loc.format, "[,]", "")] = $getFormatFromRequest(pathInfo=arguments.path);
@@ -216,8 +215,9 @@
 	<cfscript>
 		var loc = {};
 		loc.iEnd = ListLen(arguments.route.pattern, "/");
-		if (StructKeyExists(arguments.route, "format") AND len(arguments.route.format))
+		if ((StructKeyExists(arguments.route, "format") AND len(arguments.route.format)) OR find(".", arguments.path))
 		{
+			if(NOT (StructKeyExists(arguments.route, "format") AND len(arguments.route.format))) arguments.params.format = ListRest(arguments.path, ".");
 			arguments.path = Reverse(ListRest(Reverse(arguments.path), "."));
 		}
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
@@ -396,7 +396,8 @@
 	<cfargument name="params" type="struct" required="true">
 	<cfargument name="route" type="struct" required="true">
 	<cfscript>
-		if (StructKeyExists(arguments.route, "formatVariable") && StructKeyExists(arguments.route, "format"))
+		
+		if (!isDefined("arguments.params.format") && StructKeyExists(arguments.route, "formatVariable") && StructKeyExists(arguments.route, "format"))
 		{
 			arguments.params[arguments.route.formatVariable] = arguments.route.format;
 		}

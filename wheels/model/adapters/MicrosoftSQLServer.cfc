@@ -50,6 +50,7 @@
 					arguments.sql [1] = ReplaceNoCase(arguments.sql[1], "select ", "select top #arguments.maxrows# ", "one");
 				}
 				StructDelete(arguments, "maxrows");
+				arguments.sql = $removeColumnAliasesInOrderClause(arguments.sql);
 			}
 			else if (arguments.limit + arguments.offset gt 0)
 			{

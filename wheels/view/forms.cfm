@@ -13,7 +13,7 @@
 		if (StructKeyExists(request.wheels, "currentFormMethod"))
 			StructDelete(request.wheels, "currentFormMethod");
 	</cfscript>
-	<cfreturn "</form>">
+	<cfreturn "<br style='clear: both;'/></form>">
 </cffunction>
 
 <cffunction name="startFormTag" returntype="string" access="public" output="false" hint="Builds and returns a string containing the opening form tag. The form's action will be built according to the same rules as `URLFor`. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes."
