@@ -24,7 +24,6 @@
 	<cfargument name="$deliver" type="boolean" required="false" default="true">
 	<cfscript>
 		var loc = {};
-		arguments.from = "web@mstrategy.co.nz";
 		$args(args=arguments, name="sendEmail", combine="template/templates/!,layout/layouts,file/files", required="template,from,to,subject");
 
 		loc.nonPassThruArgs = "template,templates,layout,layouts,file,files,detectMultipart,$deliver";
