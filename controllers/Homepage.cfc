@@ -67,8 +67,8 @@
 				var oUser = model("user").findOneByEmail(params.details.mail);
 				if(!oUser.generateResetkey()) return renderWith(false);
 				params.resetkey = oUser.resetstring;
-				if(StructKeyExists(params, "newuser") AND params.newuser) sendEmail(template="newpasswordemail", from="forgottenpass@contestate.info", to=details.mail, subject="Welcome to Contestate.", params=params);
-				else sendEmail(template="newpasswordemail", from="forgottenpass@contestate.info", to=params.details.mail, subject="Contestate Password Retrieval", params=params);
+				if(StructKeyExists(params, "newuser") AND params.newuser) sendEmail(template="newpasswordemail", from="forgottenpass@contestate.net", to=params.details.mail, subject="Welcome to Contestate.", params=params);
+				else sendEmail(template="newpasswordemail", from="forgottenpass@contestate.net", to=params.details.mail, subject="Contestate Password Retrieval", params=params);
 				return renderWith(true);
 			}
 			return renderWith(false);
@@ -79,9 +79,9 @@
 		<cfscript>
 			if(StructKeysExist(params, "details.login,details.name,details.mail") AND model("user").count(where="username = '#params.details.login#' OR email = '#params.details.mail#'") EQ 0){
 				//send mail
-				if(model("user").create(username = params.details.login, email = params.details.mail, password = "123").hasErrors()) return renderWith(false);
+				if(model("user").create(username = params.details.login, email = params.details.mail, password = "123", fullname = params.details.name).hasErrors()) return renderWith(false);
 				params.newuser = true;
-				return renderWith(passwordretrieve());
+				return passwordretrieve();
 			}
 			return renderWith(false);
 		</cfscript>

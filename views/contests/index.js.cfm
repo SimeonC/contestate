@@ -10,12 +10,12 @@ angular.module('Contests', ['ngResource'])
 	.factory('Contest', function($resource){
 		var Contest = $resource('#URLFor(controller="contests", action="indexAngular")#/:id', {},
 			{
-				update: {method: 'PUT'}
+				put: {method: 'PUT'}
 			}
 		);
 		
 		Contest.prototype.update = function(cb) {
-			return Contest.save({id: this.id}, cb);
+			return Contest.put({id: this.id}, this, cb);
 		};
 		
 		Contest.prototype.destroy = function(cb) {
@@ -31,6 +31,10 @@ function ListCtrl($scope, $location, Contest) {
 	
 	$scope.new = function(){
 		$location.path('/new');
+	}
+	
+	$scope.delete = function(contest, $index){
+		if(new Contest(contest).destroy()) $scope.contests.splice($index, 1);
 	}
 }
 

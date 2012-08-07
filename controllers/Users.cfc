@@ -23,10 +23,10 @@
 				}
 			}
 			switch(request.cgi.request_method){
-				case "POST"://create new
-					SESSION.user.update(profiletypeid = (params.object.profiletype)?1:0, pagename = params.object.pagename, email = params.object.pagename);
-					return renderWith({"errors": SESSION.user.allErrors(), "success": SESSION.user.hasErrors()});
-				case "PUT"://update
+				case "POST"://update
+					SESSION.user.update(profiletypeid = (params.object.profiletype)?1:0, pagename = params.object.pagename, email = params.object.email, fullname = params.object.fullname, reload=true);
+					return renderWith({"errors": SESSION.user.allErrors(), "success": !SESSION.user.hasErrors()});
+				case "PUT"://save password
 					if(SESSION.user.encryptPassword(params.object.current) NEQ SESSION.user.password) return renderWith({"success": false, "old": false});
 					if(LEN(params.object.password) < 6) return renderWith({"success": false, "old": true, "matchlength": false});
 					if(params.object.password != params.object.confirm || LEN(params.object.password) < 6) return renderWith({"success": false, "matches": false, "old": true, "matchlength": true});

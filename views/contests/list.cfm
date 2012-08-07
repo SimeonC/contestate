@@ -17,7 +17,10 @@
 		<tr ng-repeat="contest in contests">
 			<td scope="row">{{contest.name}}</td>
 			<td>{{contest.gamescount}}</td>
-			<td><a href="#/edit/{{contest.id}}" class="button float-right">Edit</a></td>
+			<td>
+				<a href="javascript:void(0)" ng-click="delete(contest, $index)" class="button float-right mid-margin-left">Delete<span class="button-icon red-gradient right-side"><span class="icon-trash"></span></span></a>
+				<a href="#/edit/{{contest.id}}" class="button float-right"><span class="button-icon"><span class="icon-download"></span></span>Edit</a>
+			</td>
 		</tr>
 	</tbody>
 </table>

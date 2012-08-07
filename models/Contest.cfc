@@ -7,6 +7,9 @@
 			
 			property(sql="SELECT MAX(points) FROM conteststats WHERE conteststats.contestid = contests.id",
 				name="maxPoints");
+			
+			beforeSave("$checkParticipants");
+			beforeCreate("$checkParticipants");
 		</cfscript>
 	</cffunction>
 	
@@ -32,7 +35,6 @@
 	<cffunction name="$runEvent" access="private" hint="adds the contest stats to the db based on the passed in string, called in an transaction" returnType="boolean" output="false">
 		<cfargument name="contestors" type="string" required="true" hint="See @runEvent">
 		<cfscript>
-		SESSION.user = model("user").findByKey(1);
 			//setup the lists as arrays
 			var aPoints = ListToArray(this.points4win);
 			var aPositions = ListToArray(arguments.contestors);
@@ -49,6 +51,12 @@
 			this.gamescount++;
 			bSuccess = bSuccess AND this.save();
 			return bSuccess;
+		</cfscript>
+	</cffunction>
+	
+	<cffunction name="$checkParticipants" access="private" returnType="void" output="false" hint="Checks that the points4win list has a '0' at the end if it contains participants.">
+		<cfscript>
+			if(this.participants EQ 1 AND ListGetAt(this.points4win, ListLen(this.points4win)) NEQ "0") this.points4win = ListAppend(this.points4win, "0");
 		</cfscript>
 	</cffunction>
 	

@@ -6,6 +6,7 @@ angular.module('wizard', []).
 			controller: function($scope, $element) {
 				var steps = $scope.steps = [];
 				var currentIndex = 0;
+				$scope.optionalsteps = {};
 				
 				$scope.select = function(index) {
 					//make sure not outside the number of steps
@@ -33,9 +34,29 @@ angular.module('wizard', []).
 				}
 				
 				this.addStep = function(step) {
-					$scope.steps.push(step);
+					if(!step.optionalstep) $scope.steps.push(step);
+					else $scope.optionalsteps[step.optionalstep] = step;
 					if ($scope.steps.length == 1) $scope.select(0);
 				}
+				
+				$scope.activateOptionalStep = function(name, index){
+					if(!isNaN(parseFloat($scope.optionalsteps[name])) && isFinite($scope.optionalsteps[name])) return false;
+					$scope.steps.splice(index - 1, 0, $scope.optionalsteps[name]);
+					$scope.optionalsteps[name] = index - 1;
+					return true;
+				};
+				
+				$scope.deactivateOptionalStep = function(name){
+					console.log($scope.optionalsteps[name]);
+					if(!isNaN(parseFloat($scope.optionalsteps[name])) && isFinite($scope.optionalsteps[name])){
+						var oldIndex = $scope.optionalsteps[name];
+						$scope.optionalsteps[name] = $scope.steps[$scope.optionalsteps[name]];
+						$scope.steps.splice(oldIndex, 1);
+						if(currentIndex == oldIndex) $scope.select(currentIndex - 1);
+						$scope.optionalsteps[name].class = "";
+						$scope.optionalsteps[name].selected = false;
+					}else return false;
+				};
 				
 				$scope.next = this.next = function(){
 					$scope.select(currentIndex + 1);
@@ -71,6 +92,7 @@ directive('step', function() {
 		link: function(scope, element, attrs, wizCtrl) {
 			//set defaults
 			scope.selected = false;
+			scope.optionalstep = attrs.optionalstep || false;
 			scope.navigationprev = scope.$parent.$eval(attrs.navigationprev) || false;
 			scope.navigationnext = scope.$parent.$eval(attrs.navigationnext) || false;
 			scope.navigationfinish = scope.$parent.$eval(attrs.navigationfinish) || false;
@@ -91,7 +113,7 @@ directive('step', function() {
 			'<fieldset class="wizard-fieldset fields-list" ng-class="{active: selected}">' +
 				'<div class="field-block button-height" ng-transclude>' +
 				'</div>' +
-				'<div class="field-block button-height wizard-controls clearfix">' +
+				'<div class="field-block button-height wizard-controls clearfix">{{disablenext}}' +
 					'<button type="button" class="button glossy mid-margin-right wizard-previous float-left" ng-show="navigationprev" ng-click="prev()"><span class="button-icon anthracite-gradient"><span class="icon-backward"></span></span>Back</button>' +
 					'<button type="button" class="button glossy mid-margin-right wizard-next float-right" ng-show="navigationnext" ng-click="next()">Next<span class="button-icon right-side"><span class="icon-forward"></span></span></button>' +
 					'<button type="submit" class="button glossy mid-margin-right float-right" ng-show="navigationfinish" ng-click="finish()">Finish<span class="button-icon right-side green-gradient glossy"><span class="icon-tick"></span></span></button>' +

@@ -114,11 +114,11 @@
 						</p>
 
 						<ul class="inputs black-input large">
-							<li><span class="icon-card mid-margin-right"></span><input type="text" name="name" id="name-register" value="" class="input-unstyled" placeholder="Your Username" autocomplete="off"></li>
-							<li><span class="icon-mail mid-margin-right"></span><input type="email" name="mail" id="mail-register" value="" class="input-unstyled" placeholder="Your e-mail" autocomplete="off"></li>
+							<li><span class="icon-card mid-margin-right"></span><input type="text" name="name" id="name-register" value="" class="input-unstyled" placeholder="Your Name" autocomplete="off"></li>
+							<li><span class="icon-mail mid-margin-right"></span><input type="email" name="mail" id="mail-register" value="" class="input-unstyled" placeholder="Your E-mail" autocomplete="off"></li>
 						</ul>
 						<ul class="inputs black-input large">
-							<li><span class="icon-user mid-margin-right"></span><input type="text" name="login" id="login-register" value="" class="input-unstyled" placeholder="Login" autocomplete="off"></li>
+							<li><span class="icon-user mid-margin-right"></span><input type="text" name="login" id="login-register" value="" class="input-unstyled" placeholder="Your Username" autocomplete="off"></li>
 						</ul>
 
 						<button type="submit" class="button glossy full-width" id="send-register">Register</button>
@@ -337,10 +337,12 @@
 				else if (login.length === 0)
 				{
 					// Display message
-					displayError('Please fill in your login');
+					displayError('Please fill in your Username');
 					return false;
-				}
-				else
+				}else if(!/^[a-zA-Z0-9]{4,16}$/.test(login))
+				{
+					displayError('Username must be alphanumeric and between 4 and 16 characters in length')
+				}else
 				{
 					// Show progress
 					displayLoading('Registering...');
@@ -366,7 +368,7 @@
 							else
 							{
 								formWrapper.clearMessages();
-								displayError('An error occured, please try again or contact support@contestate.info');
+								displayError('This email and/or username is already in use, please try again');
 							}
 						},
 						error: function()
@@ -605,7 +607,7 @@
 					});
 
 					// Setup
-					container[animate ? 'animate' : 'css']({ marginTop: -Math.round((finalSize/2)+50)+'px' });
+					container[animate ? 'animate' : 'css']({ marginTop: -Math.round((finalSize/2)+40)+'px' });
 				}
 			};
 

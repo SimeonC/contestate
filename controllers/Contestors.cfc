@@ -20,20 +20,20 @@
 			}
 			switch(request.cgi.request_method){
 				case "POST"://create new
-					var contestor = model("contestors").create(params.object);
+					var contestor = SESSION.user.createContestor(params.object);
 					return renderWith({"errors": contestor.allErrors(), "success": !contestor.hasErrors(), "contestor": contestor.properties()});
 					break;
 				case "PUT"://update
-					return renderWith({"success": model("contestors").findByKey(params.key).update(params.object)});
+					return renderWith({"success": SESSION.user.findOneContestor(where='id = #params.key#').update(params.object)});
 				case "GET"://edit
 					if(isDefined("params.key")){
-						return renderWith(model("contestors").findByKey(params.key).properties());
+						return renderWith(SESSION.user.findOneContestor(where='id = #params.key#').properties());
 					}
 					break;
 				case "DELETE":
-					return renderWith({"success": model("contestors").findByKey(params.key).delete()});
+					return renderWith({"success": SESSION.user.deleteContestor(params.key)});
 			}
-			return renderWith(QueryToJSON(model("contestors").findAll()));
+			return renderWith(QueryToJSON(SESSION.user.contestors()));
 		</cfscript>
 	</cffunction>
 	

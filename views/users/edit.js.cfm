@@ -14,7 +14,8 @@ function profileEdit($scope, $resource, Profile){
 	var defaults = {
 		profiletype: #(SESSION.user.profiletypeid == 1)#,
 		pagename: '#SESSION.user.pagename#',
-		email: '#SESSION.user.email#'
+		email: '#SESSION.user.email#',
+		fullname: '#SESSION.user.fullname#'
 	};
 </cfoutput>
 	$scope.reset = function(){
@@ -26,12 +27,12 @@ function profileEdit($scope, $resource, Profile){
 	$scope.save = function(){
 		$("[ng-controller='ProfileEdit']").clearMessages('', true);
 		$("[ng-controller='ProfileEdit']").message('Sending Data', {arrow: 'bottom', classes: ['blue-gradient'], stripes: true, closable: false, append: false});
-		Profile.update({'profiletype': $scope.profiletype, 'pagename': $scope.pagename, 'email': $scope.email}, function(data){
+		Profile.update({'profiletype': $scope.profiletype, 'pagename': $scope.pagename, 'email': $scope.email, 'fullname': $scope.fullname}, function(data){
 			$("[ng-controller='ProfileEdit']").clearMessages('', true);
 			if(data.success){
 				angular.extend(defaults, {'profiletype': $scope.profiletype, 'pagename': $scope.pagename, 'email': $scope.email});
-				$("[ng-controller='passChange']").message('Your password has been changed!', {arrow: 'bottom', classes: ['green-gradient'], append: false});
-			}else $("[ng-controller='passChange']").message(message, {arrow: 'bottom', classes: ['red-gradient'], append: false});
+				$("[ng-controller='ProfileEdit']").message('Your profile has been updated!', {arrow: 'bottom', classes: ['green-gradient'], append: false});
+			}else $("[ng-controller='ProfileEdit']").message(message, {arrow: 'bottom', classes: ['red-gradient'], append: false});
 		});
 	};
 	

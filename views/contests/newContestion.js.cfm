@@ -11,10 +11,40 @@ function NewContest($scope, $resource){
 		return contests;
 	});
 	
+	$scope.newcontest = {};
+	$scope.newcontestant = {'name': ""};
+	
 	$scope.selectedContest = null;
 	$scope.selectedPlacing = 0;
 	$scope.participants = [];
 	$scope.placings = [];
+	
+	$scope.newContest = function(){
+		$scope.activateOptionalStep('newcontest', 2);
+		$scope.next();
+	};
+	
+	$scope.toggleCheckbox = function(name){
+		$scope.newcontest[name] = ($scope.newcontest[name] === 1)?0:1;
+	};
+	
+	var creatingcontest = false;
+	$scope.createContest = function(next){
+		if(!next){
+			$scope.deactivateOptionalStep('newcontest');
+		}else if(!creatingcontest){
+			creatingcontest = true;
+			var ContestResource = $resource('<cfoutput>#URLFor(controller="contests", action="indexAngular")#</cfoutput>/:id');
+			ContestResource.save($scope.newcontest, function(data){
+				ContestResource.get({id: data.id}, function(contest){
+					$scope.contests.push(contest);
+					$scope.deactivateOptionalStep('newcontest');
+					$scope.selectContest(contest);
+					creatingcontest = false;
+				});
+			});
+		}
+	};
 	
 	$scope.selectContest = function(contest){
 		$scope.selectedContest = contest;
@@ -33,6 +63,20 @@ function NewContest($scope, $resource){
 				$scope.placings = placingsData.placings;
 			});
 	}
+	
+	$scope.addingparticipant = false;
+	
+	$scope.newParticipant = function(){
+		if($scope.addingparticipant && $scope.newcontestant.name.length > 0){
+			 $resource('<cfoutput>#URLFor(controller="contestors", action="indexAngular")#</cfoutput>').save({}, {'name': $scope.newcontestant.name}, function(data){
+				if(data.success){
+					$scope.participants.push(data.contestor);
+					$scope.addingparticipant = false;
+					$scope.newcontestant.name = "";
+				}
+			 });
+		}else $scope.addingparticipant = true;
+	};
 	
 	$scope.addToPlacing = function(personindex){
 		if(!$scope.selectedContest.multiwin //if not multi win

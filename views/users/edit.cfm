@@ -38,6 +38,11 @@
 		<legend class="legend">Profile Details</legend>
 		
 		<div class="field-block button-height">
+			<label for="pagename" class="label"><b>Full Name</b></label>
+			<input type="text" name="fullname" id="fullname" ng-model="fullname" class="input">
+		</div>
+		
+		<div class="field-block button-height">
 			<small class="input-info">This is the email address we will use if you forget your password or for important updates</small>
 			<label for="email" class="label"><b>Email</b></label>
 			<input type="text" name="email" id="email" ng-model="email" class="input" required="required">

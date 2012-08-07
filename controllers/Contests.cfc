@@ -35,20 +35,20 @@
 			}
 			switch(request.cgi.request_method){
 				case "POST"://create new
-					var contest = model("contest").create(params.object);
+					var contest = SESSION.user.createContest(params.object);
 					return renderWith({"errors": contest.allErrors(), "id": contest.id});
 					break;
 				case "PUT"://update
-					return renderWith({"success": model("contest").findByKey(params.key).update(params.object)});
+					return renderWith({"success": SESSION.user.findOneContest(where='id = #params.key#').update(params.object)});
 				case "GET"://edit
 					if(isDefined("params.key")){
-						return renderWith(model("contest").findByKey(params.key).properties());
+						return renderWith(SESSION.user.findOneContest(where='id = #params.key#').properties());
 					}
 					break;
 				case "DELETE":
-					return renderWith({"success": model("contest").findByKey(params.key).delete()});
+					return renderWith({"success": SESSION.user.findOneContest(where='id = #params.key#').delete()});
 			}
-			return renderWith(QueryToJSON(model("contest").findAll()));
+			return renderWith(QueryToJSON(SESSION.user.contests()));
 		</cfscript>
 	</cffunction>
 	
@@ -58,8 +58,8 @@
 		</cfif>
 		<cfscript>
 			jsincludes = "developr.input, angular/angular-1.0.1.min, angular/angular-resource-1.0.1.min, angular/angular.modules";
-			contests = model("contest").findAll(where="userid = 1");
-			contestors = model("contestor").findAll(where="userid = 1");
+			contests = SESSION.user.contests();
+			contestors = SESSION.user.contestors();
 			title = "New Contestion";
 		</cfscript>
 	</cffunction>
@@ -86,7 +86,7 @@
 				}
 			}
 			var query = '';
-			var user = model("user").findByKey(1);//replace with SESSION.currentUser
+			var user = model("user").findByKey(SESSION.user.id);
 			switch(params.type){
 				case "contests":
 					query = user.contests();
@@ -94,7 +94,6 @@
 				case "placings":
 					var contest = user.findOneContest(where = "id = #params.contestid#");
 					var placings = [];
-					if(contest.participants EQ 0) contest.points4win = ReReplaceNoCase(contest.points4win, ",0", "");
 					for(i = 1; i LTE ListLen(contest.points4win); i++) ArrayAppend(placings, {"points": ListGetAt(contest.points4win, i), "placers": []});
 					return renderWith({"placings": placings, "participants": QueryToJSON(user.contestors())});
 				default:

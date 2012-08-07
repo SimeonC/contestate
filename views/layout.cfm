@@ -1,3 +1,26 @@
+<cfscript>
+	if(isDefined("SESSION.user")){
+		if(SESSION.user.pagename NEQ '')
+			pagename = Capitalize(SESSION.user.pagename);
+		else
+			pagename = Capitalize(SESSION.user.username);
+	}else if(isDefined("params.user")){
+		attempt = model("user").findByUsername(params.user);
+		if(isStruct(attempt) AND attempt.pagename NEQ "")
+			pagename = Capitalize(attempt.pagename);
+		else if(isStruct(attempt))
+			pagename = Capitalize(attempt.username);
+		else{
+			attempt = model("user").findByUsername(model("user").decryptUsername(params.user));
+			if(isStruct(attempt) AND attempt.pagename NEQ "")
+				pagename = Capitalize(attempt.pagename);
+			else if(isStruct(attempt))
+				pagename = Capitalize(attempt.username);
+			else
+				pagename = Capitalize(params.user);
+		}
+	}
+</cfscript>
 <!DOCTYPE html>
 
 <!--[if IEMobile 7]><html class="no-js iem7 oldie"><![endif]-->
@@ -9,7 +32,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-	<title>Developr</title>
+	<title><cfoutput>Contestate By #pagename#</cfoutput></title>
 	<meta name="description" content="">
 	<meta name="author" content="">
 
@@ -56,7 +79,7 @@
 	<!-- IE9 Pinned Sites: http://msdn.microsoft.com/en-us/library/gg131029.aspx -->
 	<meta name="application-name" content="Contestate!">
 	<meta name="msapplication-tooltip" content="Cross-platform admin template.">
-	<meta name="msapplication-starturl" content="http://www.contestate.info/login">
+	<meta name="msapplication-starturl" content="http://www.contestate.net/login">
 	<!-- These custom tasks are examples, you need to edit them to show actual pages -->
 	<meta name="msapplication-task" content="name=Agenda;action-uri=http://www.display-inline.fr/demo/developr/agenda.html;icon-uri=http://www.display-inline.fr/demo/developr/images/favicons/favicon.ico">
 	<meta name="msapplication-task" content="name=My profile;action-uri=http://www.display-inline.fr/demo/developr/profile.html;icon-uri=http://www.display-inline.fr/demo/developr/images/favicons/favicon.ico">
@@ -69,31 +92,7 @@
 
 	<!-- Title bar -->
 	<header role="banner" id="title-bar">
-		<h2><cfoutput>
-			<cfif isDefined("SESSION.user")>
-				<cfif SESSION.user.pagename NEQ ''>
-					#Capitalize(SESSION.user.pagename)#
-				<cfelse>
-					#Capitalize(SESSION.user.username)#
-				</cfif>
-			<cfelseif isDefined("params.user")>
-				<cfset attempt = model("user").findByUsername(params.user)>
-				<cfif isStruct(attempt) AND attempt.pagename NEQ "">
-					#Capitalize(attempt.pagename)#
-				<cfelseif isStruct(attempt)>
-					#Capitalize(attempt.username)#
-				<cfelse>
-					<cfset attempt = model("user").findByUsername(model("user").decryptUsername(params.user))>
-					<cfif isStruct(attempt) AND attempt.pagename NEQ "">
-						#Capitalize(attempt.pagename)#
-					<cfelseif isStruct(attempt)>
-						#Capitalize(attempt.username)#
-					<cfelse>
-						#Capitalize(params.user)#
-					</cfif>
-				</cfif>
-			</cfif>
-		</cfoutput></h2>
+		<h2><cfoutput>#pagename#</cfoutput></h2>
 	</header>
 	
 	<cfif isDefined("SESSION.user") AND isStruct(SESSION.user)>
@@ -146,7 +145,7 @@
 				<div id="profile">
 					<img src="/images/user.png" width="64" height="64" alt="User name" class="user-icon">
 					Hello
-					<span class="name"><b>#capitalize(SESSION.user.username)#</b></span>
+					<span class="name"><b>#capitalize(SESSION.user.fullname)#</b></span>
 				</div>
 	
 				<!-- By default, this section is made for 4 icons, see the doc to learn how to change this, in "basic markup explained" -->

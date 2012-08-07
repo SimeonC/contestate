@@ -8,6 +8,10 @@ angular.module('Contestors', ['ngResource'])
 			}
 		);
 		
+		ContestorResource.prototype.create = function(cb){
+			return ContestorResource.new({}, this.data, cb);
+		}
+		
 		ContestorResource.prototype.update = function(cb) {
 			return ContestorResource.save({id: this.data.id}, this.data, cb);
 		};
@@ -29,17 +33,18 @@ function Contestors($scope, ContestorResource){
 	});
 	
 	$scope.addNew = function(){
-		$scope.contestors.push({"editing": true, "index": $scope.contestors.length});
+		$scope.contestors.push(new ContestorResource({"editing": true, "index": $scope.contestors.length}));
 	};
 	
 	$scope.save = function(contestor){
 		if (!!contestor.data.id){
 			contestor.update(function(data){if(data.success) contestor.master = angular.copy(contestor.data);});
 		}else{
-			ContestorResource.new(contestor.data, function(data){
+			contestor.create(function(data){
 				if(data.success){
 					angular.extend($scope.contestors[contestor.index].data, data.contestor);
 					$scope.contestors[contestor.index].master = angular.copy($scope.contestors[contestor.index].data);
+					$scope.contestors[contestor.index].isClean = function(){return angular.equals(this.data, this.master)};
 				}
 			});
 		}
