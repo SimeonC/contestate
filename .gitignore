@@ -13,3 +13,4 @@ stylesheets/bundles
 
 # Railo/CF Files
 WEB-INF
+events/onapplicationstart.cfm
