@@ -108,7 +108,7 @@
 			<section id="introduction">
 				<p>Welcome to Contestate, currently this site is in <b style="color: red">OPEN ALPHA</b> and as such is well open to suggestions, also there will most likely be bugs, please report them at the <a href="https://github.com/SimeonC/contestate/issues">Contestate Github Repository</a></p>
 				<p>More information is to follow soon with regards to tutorials and videos to come.</p>
-				<p>Also this page is a mess, I'll fix it eventually!! (And those pictures top right are only the template ones, haven't bothered on changing them yet)</p>
+				<p>Also this page needs work, I'll fix it eventually!! (And those pictures top right are only the template ones, haven't bothered on changing them yet)</p>
 			</section>
 
 			<!---
@@ -222,15 +222,15 @@
 				<h4>Bonus</h4>
 				<p>This landing page is included in the template package, <strong>for free!</strong></p>
 			</div>
+--->
 
 			<h4 id="share">Share</h4>
 
 			<div id="sharrre">
-				<div id="twitter" data-url="http://www.display-inline.fr/demo/developr/" data-text="Building a web app for desktop and mobile devices? Developr Admin Skin is for you: http://goo.gl/GDdmr"></div>
-				<div id="facebook" data-url="http://www.display-inline.fr/demo/developr/" data-text="Building a web app for desktop and mobile devices? Developr Admin Skin is for you: http://goo.gl/GDdmr"></div>
-				<div id="googleplus" data-url="http://www.display-inline.fr/demo/developr/" data-text="Building a web app for desktop and mobile devices? Developr Admin Skin is for you: http://goo.gl/GDdmr"></div>
+				<div id="twitter" data-url="http://www.contestate.net" data-text="Contestate, a site designed to track, tally and count anything anywhere you want."></div>
+				<div id="facebook" data-url="http://www.contestate.net" data-text="Contestate, a site designed to track, tally and count anything anywhere you want."></div>
+				<div id="googleplus" data-url="http://www.contestate.net" data-text="Contestate, a site designed to track, tally and count anything anywhere you want."></div>
 			</div>
---->
 
 		</aside>
 

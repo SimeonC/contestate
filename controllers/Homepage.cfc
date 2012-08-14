@@ -67,7 +67,7 @@
 				var oUser = model("user").findOneByEmail(params.details.mail);
 				if(!oUser.generateResetkey()) return renderWith(false);
 				params.resetkey = oUser.resetstring;
-				if(StructKeyExists(params, "newuser") AND params.newuser) sendEmail(template="newpasswordemail", from="forgottenpass@contestate.net", to=params.details.mail, subject="Welcome to Contestate.", params=params);
+				if(StructKeyExists(params, "newuser") AND params.newuser) sendEmail(template="newuseremail", from="welcome@contestate.net", to=params.details.mail, subject="Welcome to Contestate.", params=params);
 				else sendEmail(template="newpasswordemail", from="forgottenpass@contestate.net", to=params.details.mail, subject="Contestate Password Retrieval", params=params);
 				return renderWith(true);
 			}

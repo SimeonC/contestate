@@ -4,14 +4,19 @@
 			pagename = Capitalize(SESSION.user.pagename);
 		else
 			pagename = Capitalize(SESSION.user.username);
+		if(SESSION.user.profiletypeid EQ 1)//public profile
+			pageURL = URLFor(controller=SESSION.user.username, onlyPath=false);
+		else
+			pageURL = URLFor(controller=SESSION.user.encryptUsername(), onlyPath=false);
 	}else if(isDefined("params.user")){
-		attempt = model("user").findByUsername(params.user);
+		pageURL = URLFor(controller=params.user, onlyPath=false);
+		attempt = model("user").findOneByUsername(params.user);
 		if(isStruct(attempt) AND attempt.pagename NEQ "")
 			pagename = Capitalize(attempt.pagename);
 		else if(isStruct(attempt))
 			pagename = Capitalize(attempt.username);
 		else{
-			attempt = model("user").findByUsername(model("user").decryptUsername(params.user));
+			attempt = model("user").findOneByUsername(model("user").decryptUsername(params.user));
 			if(isStruct(attempt) AND attempt.pagename NEQ "")
 				pagename = Capitalize(attempt.pagename);
 			else if(isStruct(attempt))
@@ -20,6 +25,7 @@
 				pagename = Capitalize(params.user);
 		}
 	}
+	request.pageURL = pageURL;
 </cfscript>
 <!DOCTYPE html>
 
@@ -86,7 +92,15 @@
 </head>
 
 <body class="clearfix <cfif isDefined("SESSION.user") AND isStruct(SESSION.user)>with-menu with-shortcuts</cfif>">
-
+	<!--- facebook buttons setup --->
+	<div id="fb-root"></div>
+	<script>(function(d, s, id) {
+	  var js, fjs = d.getElementsByTagName(s)[0];
+	  if (d.getElementById(id)) return;
+	  js = d.createElement(s); js.id = id;
+	  js.src = "//connect.facebook.net/en_GB/all.js";
+	  fjs.parentNode.insertBefore(js, fjs);
+	}(document, 'script', 'facebook-jssdk'));</script>
 	<!-- Prompt IE 6 users to install Chrome Frame -->
 	<!--[if lt IE 7]><p class="message red-gradient simpler">Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
 
@@ -111,6 +125,7 @@
 
 		<!-- Main title -->
 		<hgroup id="main-title">
+			<div style="float: right;" class="fb-like" data-href="<cfoutput>#pageurl#</cfoutput>" data-send="false" data-layout="button_count" data-width="450" data-show-faces="false" data-font="arial"></div>
 			<cfif NOT isDefined("SESSION.user")><b><cfoutput>#linkTo(route="login", text="Login", class="button blue-gradient glossy float-right")#</cfoutput></b></cfif>
 			<h1 class="thin"><cfoutput>#title#</cfoutput></h1>
 		</hgroup>

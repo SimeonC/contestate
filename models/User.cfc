@@ -18,14 +18,14 @@
 	
 	<cffunction name="encryptUsername" hint="used for generating the encrypted Unique URL for private profiles">
 		<cfscript>
-			return ToBase64(encrypt(this.username, application.privatecontestsKey));
+			return encrypt(this.username, application.privatecontestsKey, "CFMX_COMPAT", "HEX");
 		</cfscript>
 	</cffunction>
 	
 	<cffunction name="decryptUsername" hint="used for viewing private contestate profiles">
 		<cfargument name="name" type="string" required="true">
 		<cfscript>
-			return Decrypt(ToString(ToBinary(arguments.name)), application.privatecontestsKey);
+			return Decrypt(arguments.name, application.privatecontestsKey, "CFMX_COMPAT", "HEX");
 		</cfscript>
 	</cffunction>
 	

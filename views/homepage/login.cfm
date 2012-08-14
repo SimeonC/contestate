@@ -55,12 +55,9 @@
 	<meta http-equiv="cleartype" content="on">
 
 	<!-- IE9 Pinned Sites: http://msdn.microsoft.com/en-us/library/gg131029.aspx -->
-	<meta name="application-name" content="Developr Admin Skin">
-	<meta name="msapplication-tooltip" content="Cross-platform admin template.">
-	<meta name="msapplication-starturl" content="http://www.display-inline.fr/demo/developr">
-	<!-- These custom tasks are examples, you need to edit them to show actual pages -->
-	<meta name="msapplication-task" content="name=Agenda;action-uri=http://www.display-inline.fr/demo/developr/agenda.html;icon-uri=http://www.display-inline.fr/demo/developr/img/favicons/favicon.ico">
-	<meta name="msapplication-task" content="name=My profile;action-uri=http://www.display-inline.fr/demo/developr/profile.html;icon-uri=http://www.display-inline.fr/demo/developr/img/favicons/favicon.ico">
+	<meta name="application-name" content="Contestate">
+	<meta name="msapplication-tooltip" content="Contestate, a site designed to track, tally and count anything anywhere you want.">
+	<meta name="msapplication-starturl" content="http://www.contestate.net">
 </head>
 
 <body>
@@ -607,7 +604,7 @@
 					});
 
 					// Setup
-					container[animate ? 'animate' : 'css']({ marginTop: -Math.round((finalSize/2)+40)+'px' });
+					container[animate ? 'animate' : 'css']({ marginTop: -Math.round((finalSize/2)+20)+'px' });
 				}
 			};
 

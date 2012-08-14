@@ -6,6 +6,7 @@
 	//these must be usable no matter where - they ignore the user part
 	addRoute(name="login", pattern="/login", controller="homepage", action="login");
 	addRoute(name="logout", pattern="/logout", controller="homepage", action="logout");
+	addRoute(name="emailreset", pattern="/emailreset/[key]", controller="homepage", action="emailreset");
 	//working pages calls
 	addRoute(pattern="/dashboard/[action]/[key]", controller="dashboard");
 	addRoute(name="dashboard", pattern="/dashboard", controller="dashboard", action="index");
@@ -19,7 +20,6 @@
 	addRoute(name="homepagekey", pattern="/homepage/[action]/[key]", controller="homepage");
 	addRoute(name="homepage", pattern="/homepage/[action]", controller="homepage");
 	//these ones are for user interactions
-	addRoute(name="emailreset", pattern="/[user]/emailreset", controller="users", action="emailreset");
 	addRoute(name="profile", pattern="/[user]/profile", controller="users", action="edit");
 	addRoute(pattern="/users/[action]/[key]", controller="users");
 	addRoute(pattern="/users/[action]", controller="users");

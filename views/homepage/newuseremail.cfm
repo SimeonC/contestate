@@ -116,12 +116,14 @@
 </head>
 <body>
 <div class="block eight-columns">
-	<h3 class="block-title message align-center blue-gradient">You just requested your password to be reset!</h3>
+	<h3 class="block-title message align-center blue-gradient">Welcome To Contestate!</h3>
 	<div class="with-padding">
-		<p>If you didn't request your password to be reset, just ignore this message - we haven't changed anything!</p>
-		<p>If you did want to change your password <cfoutput>#LinkTo(controller="homepage", action="emailreset", key=params.resetkey, text="Click Here!", onlyPath=false)#</cfoutput> (this link will expire in 24 hours)</p>
+		<p>We send this email to give you some initial information about <cfoutput>#LinkTo(route="home", text="Contestate", onlyPath=false)#</cfoutput>, confirm your email address and to securely set your password, to do so <cfoutput>#LinkTo(controller="homepage", action="emailreset", key=params.resetkey, text="Click Here!", onlyPath=false)#</cfoutput> (this link will expire in 24 hours, if you wait longer than that just go to the <cfoutput>#linkTo(route="login", anchor="form-password", text="Login Page", onlyPath=false)#</cfoutput> and request to reset your password)</p>
 		<br/>
-		<p>Regards,<br/>
+		<p>Currently <cfoutput>#LinkTo(route="home", text="Contestate", onlyPath=false)#</cfoutput> is in open alpha state and as at such we cannot guarantee that you will keep your data (we will do our best thou!) and we would be very grateful if you could report any bugs you find to the <a href="https://github.com/SimeonC/contestate/issues">Contestate Github Repository</a></p>
+		<p>If you have trouble or a request feel free to email us <a href="mailto:info@contestate.net">info@contestate.net</a>, I will be putting up tutorial videos on <cfoutput>#LinkTo(route="home", text="contestate.net", onlyPath=false)#</cfoutput> as I get the time to make them.</p>
+		<br/>
+		<p>Thanks for signing up,<br/>
 		The Contestate Team.</p>
 	</div>
 </body>
